@@ -1,0 +1,176 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  The Application page gives the user a form to enter relevant details so that they can apply for a particular
+    research opportunity.
+ -->
+
+@{
+    ViewData["Title"] = "Application";
+}
+<body class="page" id="app_pg">
+
+    <!-- Title with U of U Logo-->
+    <div class="app_container" id="ac">
+        <table class="header" id="app_h">
+            <tbody>
+                <tr>
+                    <td width="85%">
+                        Submit an Application
+                    </td>
+                    <td>
+                        <img src="/images/uofu.jpg" alt="UofU Logo" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <!-- Bootstrap for the student application form-->
+
+    <form class="opportunity"> <!--Borrow same style from opportunity class-->
+
+        <div class="form-row">
+            <div class="form-group col-sm-4">
+                <label for="inputFirstName">First Name</label>
+                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" readonly>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="inputLastName">Last Name</label>
+                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" readonly>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="inputUID">uID (u + 7 digits e.g. u1234567)</label>
+                <input type="text" class="form-control" id="inputUID" placeholder="uID" readonly>
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Email Address</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email" readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Phone Number</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputAddress">Address</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" readonly>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCity">City</label>
+                <input type="text" class="form-control" id="inputCity">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputState">State</label>
+                <select id="inputState" class="form-control">
+                    <option selected>Choose...</option>
+                    <!--Giant list of states!-->
+                    <option>AL</option>
+                    <option>AK</option>
+                    <option>AZ</option>
+                    <option>AR</option>
+                    <option>CA</option>
+                    <option>CO</option>
+                    <option>CT</option>
+                    <option>DE</option>
+                    <option>DC</option>
+                    <option>FL</option>
+                    <option>GA</option>
+                    <option>HI</option>
+                    <option>ID</option>
+                    <option>IL</option>
+                    <option>IN</option>
+                    <option>IA</option>
+                    <option>KS</option>
+                    <option>KY</option>
+                    <option>LA</option>
+                    <option>ME</option>
+                    <option>MT</option>
+                    <option>NE</option>
+                    <option>NV</option>
+                    <option>NH</option>
+                    <option>NJ</option>
+                    <option>NM</option>
+                    <option>NY</option>
+                    <option>NC</option>
+                    <option>ND</option>
+                    <option>OH</option>
+                    <option>OK</option>
+                    <option>OR</option>
+                    <option>MD</option>
+                    <option>MA</option>
+                    <option>MI</option>
+                    <option>MN</option>
+                    <option>MS</option>
+                    <option>MO</option>
+                    <option>PA</option>
+                    <option>RI</option>
+                    <option>SC</option>
+                    <option>SD</option>
+                    <option>TN</option>
+                    <option>TX</option>
+                    <option>UT</option>
+                    <option>VT</option>
+                    <option>VA</option>
+                    <option>WA</option>
+                    <option>WV</option>
+                    <option>WI</option>
+                    <option>WY</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputZip">Zip</label>
+                <input type="text" class="form-control" id="inputZip">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="courseWork text box">Briefly describe some of the relevant coursework you have completed:</label>
+            <textarea class="form-control" id="courseWork" rows="3" readonly></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="languages">List a few of the programming languages you are most comfortable with, and describe your experience level:</label>
+            <textarea class="form-control" id="langList" rows="3" readonly></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="personal">Tell us about yourself!  Interests, hobbies, etc.</label>
+            <textarea class="form-control" id="personalDescription" rows="5" readonly></textarea>
+        </div>
+
+    <!--Resume upload box-->
+        <hr class="my-4">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="exampleFormControlFile1">Upload Resume</label>
+                <input type="file" class="form-control-file" id="resume_select">
+            </div>
+            <!--Submit button-->
+            <div class="form-group">
+                <p class="lead">
+                    <a href="/ResearchOpportunities/Index" class="btn btn-primary" style="box-shadow: #3f3f3f 2px 4px; margin: 20px;">Submit Application</a>
+                </p>
+            </div>
+        </div>
+    </form>
+
+</body>

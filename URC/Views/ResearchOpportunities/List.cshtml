@@ -1,0 +1,158 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+    View for the Opportunity DB Administration page
+    Reference for table pagination view code: https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/getting-started-with-ef-using-mvc/sorting-filtering-and-paging-with-the-entity-framework-in-an-asp-net-mvc-application
+
+ -->
+
+
+@model X.PagedList.IPagedList<URC.Models.ResearchOpportunity>
+@using X.PagedList.Mvc.Core
+
+@{
+    ViewBag.Title = "OppAdminView";
+}
+
+<asp:content ID="xContent" ContentPlaceHolderID="headContent" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</asp:content>
+
+<body class="opp_page">
+    <table class="header" style="margin-top: 25px;" id="home_h">
+        <tbody>
+            <tr>
+                <td width="85%">
+                    Opportunity Admin. Page
+                </td>
+                <td>
+                    <img src="/images/uofu.jpg" alt="UofU Logo" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <div class="main_opp_container">
+
+        <div class="table" style="margin-top: 25px">
+            <div class="align-middle text-center">
+                <a button type="button" asp-action="Create" class="btn btn-primary" style=" position:relative; margin: auto ;border-radius: 0px; width: 300px; height: 65px; padding: 10px; margin-right: 100px; box-shadow: 3px 4px #888888"><p>Add New Opportunity</p></a>
+            </div>
+
+            <div class="row text-center opportunity">
+                <div class="nicep col-lg-6">
+                    <p class="nicep">
+                        Search by professor name or email:
+                        <br />
+                        @using (Html.BeginForm("List", "ResearchOpportunities", FormMethod.Get))
+                        {
+                            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                            <input style="margin-bottom:0px; border-radius: 0px 0px; box-shadow: 2px 2px #888888; margin-left: 10px;" class="btn btn-primary" type="submit" value="Search" />
+                        }
+                    </p>
+                </div>
+
+                <div class="nicep col-lg-6 text-center">
+                    <p style="padding: 15px; margin-top: 30px">
+                        @Html.ActionLink("Sort Opportunities by name", "List", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </p>
+                </div>
+            </div>
+
+            <!--Research Opportunity Element-->
+            <div class="opp_admin" id="opp_1" style="margin-top: 25px">
+
+                <table class="opportunity">
+                    <tbody>
+
+                        <tr>
+                            <th>
+                                Principal Investigator:
+                            </th>
+                            <th>
+                                Email:
+                            </th>
+                            <th>
+                                Project:
+                            </th>
+                            <th>
+                                Edit
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="admin_list">
+                                    @Html.DisplayFor(itemModel => item.ProfName)
+                                </td>
+                                <td class="admin_list">
+                                    @Html.DisplayFor(itemModel => item.ProfEmail)
+                                </td>
+                                <td class="admin_list">
+                                    @Html.DisplayFor(itemModel => item.ProjectName)
+                                </td>
+                                <td class="admin_list">
+                                    <a class="btn btn-primary" asp-action="Edit" style="border-radius:0px 0px; box-shadow: 2px 2px #888888" asp-route-id="@item.ID">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td class="admin_list">
+                                    <a class="btn btn-primary" asp-action="Delete" style="border-radius:0px 0px; box-shadow: 2px 2px #888888" asp-route-id="@item.ID">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" style="padding: 25px;">
+                <p>
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                </p>
+                @Html.PagedListPager(Model, page => Url.Action("List", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            </div>
+
+        </div>
+    </div>
+    @section Scripts {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+                if ('@ViewBag.Message' != '') {
+                    toastr["success"]('@ViewBag.Message');
+                }
+            });
+        </script>
+    }
+</body>

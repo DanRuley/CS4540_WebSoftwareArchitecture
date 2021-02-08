@@ -1,0 +1,132 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  View for the Student Application Create page.
+ -->
+@model URC.Models.StudentApplication
+
+@{
+    ViewData["Title"] = "Create";
+}
+<body class="opp_page">
+    <h1>Create</h1>
+
+    <h4>StudentApplication</h4>
+    <hr />
+    <div class="row opportunity" style="margin-left: 0px;">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ID" />
+
+                <div class="form-group">
+                    <label asp-for="Skills" class="control-label"></label>
+                    <input asp-for="Skills" class="form-control  crud_form" />
+                    <span asp-validation-for="Skills" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ResumeFile" class="control-label"></label>
+                    <input asp-for="ResumeFile" class="form-control" />
+                    <span asp-validation-for="ResumeFile" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Interests" class="control-label"></label>
+                    <input asp-for="Interests" class="form-control" />
+                    <span asp-validation-for="Interests" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GradDate" class="control-label"></label>
+                    <input asp-for="GradDate" class="form-control" />
+                    <span asp-validation-for="GradDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CompletedCourses" class="control-label"></label>
+                    <input asp-for="CompletedCourses" class="form-control" />
+                    <span asp-validation-for="CompletedCourses" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Degree" class="control-label"></label>
+                    <input asp-for="Degree" class="form-control" />
+                    <span asp-validation-for="Degree" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GPA" class="control-label"></label>
+                    <input asp-for="GPA" class="form-control" />
+                    <span asp-validation-for="GPA" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="UID" class="control-label"></label>
+                    <input asp-for="UID" class="form-control" />
+                    <span asp-validation-for="UID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HoursPerWeek" class="control-label"></label>
+                    <input asp-for="HoursPerWeek" class="form-control" />
+                    <span asp-validation-for="HoursPerWeek" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PersonalStatement" class="control-label"></label>
+                    <textarea asp-for="PersonalStatement" class="form-control"></textarea>
+                    <span asp-validation-for="PersonalStatement" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+
+            <form style="margin-top: 200px;" method="post" enctype="multipart/form-data" onsubmit="AJAXResumeUpload(this); return false;" asp-controller="StudentApplications" asp-action="UploadResume">
+                <div class="form-group">
+                    Upload your resume to change the resume file associated with your application.
+                    <div class="col-md-10">
+                        <input style="padding: 15px" type="file" , name="files" multiple />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="submit" style="margin-left: 15px" value="Upload" />
+                    </div>
+                </div>
+            </form>
+
+            <div class="col-md-10" id="response">
+
+            </div>
+        </div>
+
+    </div>
+
+    <div>
+        <a asp-action="Index" asp-controller="Home">Back to Homepage</a>
+    </div>
+</body>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

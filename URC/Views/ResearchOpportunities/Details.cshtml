@@ -1,0 +1,144 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+    View for the Opportunity Details page.
+ -->
+
+
+@model URC.Models.ResearchOpportunity
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+
+
+<asp:content ID="xContent" ContentPlaceHolderID="headContent" runat="server">
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</asp:content>
+
+<body class="page" id="details_pg">
+
+
+    <table class="header" id="details_h">
+        <tbody>
+            <tr>
+                <td width="85%">
+                    Research Opportunity Details
+                </td>
+                <td>
+                    <img src="/images/uofu.jpg" alt="Pict" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    @{ string FormattedDate = "";
+        <div class="details">
+
+            <table class="detail_table" id="dt_1">
+
+                    <tbody>
+
+                        <tr>
+                            <th>
+                                Email:
+                            </th>
+                            <td>
+                                @Html.DisplayFor(model => model.ProfEmail)
+                            </td>
+
+                        <tr>
+                            <th>
+                                Phone Number:
+                            </th>
+                            <td>
+                                @Html.DisplayFor(model => model.PhoneNumber)
+                            </td>
+                        </tr>
+
+                        @if ((Model.WebsiteLink != "No Website Provided") || Model.WebsiteLink.Length > 0)
+                        {
+                            <tr>
+                                <th>
+                                    Website:
+                                </th>
+                                <td>
+                                    <a href="@Model.WebsiteLink">
+                                        @Html.DisplayFor(model => model.WebsiteLink)
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <th>
+                                Desired Applicant Skills:
+                            </th>
+                            <td>
+                                @Html.DisplayFor(model => model.Skills)
+                            </td>
+                        <tr>
+                            <th>
+                                Weekly hours:
+                            </th>
+                            <td>
+                                @Html.DisplayFor(model => model.WeeklyHrs)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Starting pay:
+                            </th>
+                            <td>
+                                $@Html.DisplayFor(model => model.HourlyPay)/hr.
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Start Date:
+                            </th>
+                            <td>
+                                @{
+                                    FormattedDate = String.Format("{0:MM/dd/yyyy}", Model.Start);
+                                }
+                                @Html.Raw(FormattedDate)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                End Date:
+                            </th>
+                            <td>
+                                @{
+                                    FormattedDate = String.Format("{0:MM/dd/yyyy}", Model.End);
+                                }
+                                @Html.Raw(FormattedDate)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Search Tags:
+                            </th>
+                            <td>
+                                @Html.DisplayFor(model => model.Tags)
+                            </td>
+                        </tr>
+                    </tbody>
+            </table>
+
+            <img src="@Html.DisplayFor(model => model.GenericImage)" alt="Pict" />
+
+
+        </div>
+    }
+</body>

@@ -1,0 +1,214 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  The Opportunities page contains three sample research opportunities.  Each opportunity describes
+  the type of research, required courses, whether it is paid, etc.  It also links to the Details page,
+  which contains placeholder values for the time being.
+ -->
+
+
+@{
+    ViewData["Title"] = "Research Opportunities";
+}
+
+
+
+<body class="page" id="opp_pg">
+
+    <div class="main_opp_container">
+
+
+        <!-- Title with U of U Logo-->
+        <table class="header" id="opp_h">
+            <tbody>
+                <tr>
+                    <td width="85%">
+                        Current Undergraduate Research Opportunities
+                    </td>
+                    <td>
+                        <img src="/images/uofu.jpg" alt="UofU Logo" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--Research Opportunity Element-->
+        <div class="opportunity" id="opp_1">
+            <table class="opp_table" id="ot_1">
+                <tbody>
+
+                    <tr>
+                        <td class="table_header">Dr. John Doe</td>
+
+                        <td class="table_header">Graphics and Visualization Lab</td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align: center">
+                            <img src="/images/face-placeholder.jpg" alt="Pict" />
+                        </td>
+
+                        <td width="75%">
+
+                            <table class="opp_nested_table" width="50%" id="ont_1">
+                                <tbody>
+                                    <tr>
+                                        <th>
+                                            Paid Position?
+                                        </th>
+                                        <td>
+                                            Yes
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Required Courses:
+                                        </th>
+                                        <td>
+                                            CS 3505 Software Practice II, CS 4600 Intro. to Computer Graphics
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Details:
+                                        </th>
+                                        <td>
+                                            We are looking for a paid research assistant in the Graphics and Visualization lab.  This is a paid position; please see the <a href="/Home/Details/">details</a> page for more information.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--End Research Opportunity Element-->
+        <!--Research Opportunity Element-->
+        <div class="opportunity" id="opp_2">
+            <table class="opp_table" id="ot_2">
+                <tbody>
+
+                    <tr>
+                        <td class="table_header">Dr. Jane Doe</td>
+
+                        <td class="table_header">Robotics Lab</td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align: center">
+                            <img src="/images/face-placeholder.jpg" alt="Pict" />
+                        </td>
+
+                        <td width="75%">
+
+                            <table class="opp_nested_table" width="50%" id="ont_2">
+                                <tbody>
+                                    <tr>
+                                        <th>
+                                            Paid Position?
+                                        </th>
+                                        <td>
+                                            Yes
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Required Courses:
+                                        </th>
+                                        <td>
+                                            CS 4300 Artificial Intelligence, CS 5310 Robotics
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Details:
+                                        </th>
+                                        <td>
+                                            Our group is looking for a qualified undergraduate for a position in the Robotics lab.  The primary work involves designing and debugging code for a robot simulator.
+                                            This is a paid position; please see the <a href="~/Home/Details" alt="Details page">details</a> page for more information.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <!--End Research Opportunity Element-->
+        <!--Research Opportunity Element-->
+        <div class="opportunity" id="opp_3">
+
+            <table class="opp_table" id="ot_3">
+                <tbody>
+
+                    <tr>
+                        <td class="table_header">Dr. Bob Jones</td>
+
+                        <td class="table_header">Machine Learning</td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align: center">
+                            <img src="/images/face-placeholder.jpg" alt="Pict" />
+                        </td>
+
+                        <td width="75%">
+
+                            <table class="opp_nested_table" width="50%" id="ont_3">
+                                <tbody>
+                                    <tr>
+                                        <th>
+                                            Paid Position?
+                                        </th>
+                                        <td>
+                                            Yes
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Required Courses:
+                                        </th>
+                                        <td>
+                                            CS 4150 Algorithms, CS 5350/6350 Machine Learning
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Details:
+                                        </th>
+                                        <td>
+                                            Our lab is seeking undergraduates with a solid background in machine learning for assistance on several projects.
+                                            Click <a href="~/Home/Details" alt="Details page">here</a> for more details.  You can submit an application or contact us with any questions using the links below.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--End Research Opportunity Element-->
+
+
+
+        <a href="/StudentApplications/Create" class="button" style="box-shadow: #3f3f3f 2px 4px;">Submit an Application!</a>
+
+
+
+    </div>
+</body>

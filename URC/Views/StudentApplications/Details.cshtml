@@ -1,0 +1,198 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  View for the Student Application Details page.
+ -->
+
+@model URC.Models.StudentApplication
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
+    bool can_view = false , student = false;
+    string name = "";
+    if (SignInManager.IsSignedIn(User)) {
+        name = UserManager.GetUserName(User);
+        var user = await UserManager.FindByNameAsync(name);
+
+        //The user can only view the page if they are an admin or the professor who the RO belongs to.
+        student = await UserManager.IsInRoleAsync(user, "Student");
+        can_view = await UserManager.IsInRoleAsync(user, "Professor") || (student && user.Email == Model.Email) || await UserManager.IsInRoleAsync(user, "Administrator");
+    }
+}
+<h1 style="margin-left: 150px;">Application Details</h1>
+<body class="opp_page" id="app_pg">
+
+
+    @if (can_view)
+    {
+
+        @if (student)
+        {
+            @if (!Model.Active)
+            {
+                <form method="post" enctype="text/plain" onsubmit="activateApplication()" style="margin: 20px;" asp-controller="StudentApplications" asp-action="ToggleApplicationStatus" asp-route-id="@Model.ID" asp-route-type="apply">
+                    <input type="submit" value="Activate application" class="btn btn-primary" />
+                </form>
+            }
+            else
+            {
+                <form method="post" enctype="text/plain" onsubmit="activateApplication()" style="margin: 20px;" asp-controller="StudentApplications" asp-action="ToggleApplicationStatus" asp-route-id="@Model.ID" asp-route-type="remove">
+                    <input type="submit" value="Deactivate application" class="btn btn-danger" />
+                </form>
+            }
+        }
+
+        <div class="opportunity" style="margin-left: 0px; width: 60%;">
+            <h4 style="padding: 10px;">Student application for @Html.DisplayFor(model => model.Name)</h4>
+            <hr />
+
+            <dl class="row">
+                <div class="column" style="padding: 20px;">
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.Skills)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.Skills)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.ResumeFile)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.ResumeFile)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.Interests)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.Interests)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.GradDate)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.GradDate)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.CompletedCourses)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.CompletedCourses)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.Degree)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.Degree)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.GPA)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.GPA)
+                    </dd>
+
+                </div>
+                <div class="column" style="padding: 20px">
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.UID)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.UID)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.HoursPerWeek)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.HoursPerWeek)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.PersonalStatement)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.PersonalStatement)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.AppDate)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.AppDate)
+                    </dd>
+                    <dt class="col-sm-2 crudform">
+                        @Html.DisplayNameFor(model => model.LastModified)
+                    </dt>
+                    <dd class="col-sm-10 crudform">
+                        @Html.DisplayFor(model => model.LastModified)
+                    </dd>
+                </div>
+            </dl>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@Model.ID">Delete</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p style="color: red">You do not have access to this page.</p>
+        <a asp-action="Index" asp-controller="Home">Return to homepage</a>
+    }
+
+    @section Scripts {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+                if ('@ViewBag.Message' != '') {
+                    toastr["success"]('@ViewBag.Message');
+                }
+            });
+        </script>
+    }
+
+</body>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.3.5/dist/sweetalert2.all.min.js"></script>

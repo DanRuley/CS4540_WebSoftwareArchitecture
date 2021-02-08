@@ -1,0 +1,192 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+    View for editing a Research Opportunity
+ -->
+@model URC.Models.ResearchOpportunity
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@{
+    var name = UserManager.GetUserName(User);
+    var user = await UserManager.FindByNameAsync(name);
+
+    //The user can only view the page if they are an admin or the professor who the RO belongs to.
+    bool can_view = await UserManager.IsInRoleAsync(user, "Professor") && user.UserName == Model.ProfEmail;
+
+
+    @if (can_view)
+    {
+        <body class="opp_page">
+            <h1>Edit Research Opportunity</h1>
+            <hr />
+            <div class="row opportunity" style="margin-left: 0px;">
+
+                <div class="col-md-6">
+                    <form asp-action="Edit">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="ID" />
+                        <div class="form-group">
+                            <label asp-for="ProjectName" class="control-label"></label>
+                            <input asp-for="ProjectName" class="form-control" />
+                            <span asp-validation-for="ProjectName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProfName" class="control-label"></label>
+                            <input asp-for="ProfName" class="form-control" />
+                            <span asp-validation-for="ProfName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProfEmail" class="control-label"></label>
+                            <input asp-for="ProfEmail" class="form-control" />
+                            <span asp-validation-for="ProfEmail" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ProfessorImage" class="control-label"></label>
+                            <input id="ProfessorImage" asp-for="ProfessorImage" class="form-control" />
+                            <span asp-validation-for="ProfessorImage" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="GenericImage" class="control-label"></label>
+                            <input id="ProfessorImage" asp-for="GenericImage" class="form-control" />
+                            <span asp-validation-for="GenericImage" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <textarea asp-for="Description" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="StudentMentor" class="control-label"></label>
+                            <input asp-for="StudentMentor" class="form-control" />
+                            <span asp-validation-for="StudentMentor" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Start" class="control-label"></label>
+                            <input asp-for="Start" class="form-control" />
+                            <span asp-validation-for="Start" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="End" class="control-label"></label>
+                            <input asp-for="End" class="form-control" />
+                            <span asp-validation-for="End" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber" class="control-label"></label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="Filled" /> @Html.DisplayNameFor(model => model.Filled)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="WeeklyHrs" class="control-label"></label>
+                            <input asp-for="WeeklyHrs" class="form-control" />
+                            <span asp-validation-for="WeeklyHrs" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="HourlyPay" class="control-label"></label>
+                            <input asp-for="HourlyPay" class="form-control" />
+                            <span asp-validation-for="HourlyPay" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Skills" class="control-label"></label>
+                            <input asp-for="Skills" class="form-control" />
+                            <span asp-validation-for="Skills" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Tags" class="control-label"></label>
+                            <input asp-for="Tags" class="form-control" />
+                            <span asp-validation-for="Tags" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+
+                    <form style="margin-top: 200px;" method="post" enctype="multipart/form-data" onsubmit="AJAXImageUpload(this, 'professor'); return false;" asp-controller="ResearchOpportunities" asp-action="UploadFiles">
+                        <div class="form-group">
+                            Upload an image file to change the professor image associated with the opportunity
+                            <div class="col-md-10">
+
+
+                                <input style="padding: 15px" type="file" , name="files" multiple />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input type="submit" style="margin-left: 15px" value="Upload" />
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="col-md-10" id="response-professor">
+
+                    </div>
+
+                    <form style="margin-top: 200px;" method="post" enctype="multipart/form-data" onsubmit="AJAXImageUpload(this, 'generic'); return false;" asp-controller="ResearchOpportunities" asp-action="UploadFiles">
+                        <div class="form-group">
+                            Upload an image file to change the generic image associated with the opportunity
+                            <div class="col-md-10">
+
+
+                                <input style="padding: 15px" type="file" , name="files" multiple />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input type="submit" style="margin-left: 15px" value="Upload" />
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="col-md-10" id="response-generic">
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
+        </body>
+    }
+    else
+    {
+        <body class="page">
+            <p style="color: red">You do not have access to this page.</p>
+            <a href="Home/Index">Return to homepage</a>
+        </body>
+    }
+}
+
+<script>
+
+</script>
+
+

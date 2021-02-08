@@ -1,0 +1,47 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<URC.Models.StudentOpportunityApplied>
+@inject URC.Data.ResearchOpportunityContext oppDB
+@{
+}
+
+<body class="opp_page" id="opp_pg">
+    <table class="detail_table" id="dt_1">
+        <thead>
+            <tr>
+                <th>
+                    Opportunity Name
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Date Created
+                </th>
+                <th>
+                    Date Last Updated
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @oppDB.ResearchOpportunities.Find(item.ResearchOpportunityID).ProjectName
+                </td>
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    @item.DateCreated
+                </td>
+                <td>
+                    @item.DateUpdated
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</body>

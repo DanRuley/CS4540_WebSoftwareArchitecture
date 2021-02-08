@@ -1,0 +1,232 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  Contains html for the generic page that all of the other pages are built on top of.  I slightly modified it to add the author, keywords, and description meta tags.  I also added the Opportunities and Details page to the top and bottom navbars.
+ -->
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject URC.Data.ResearchOpportunityContext oppDB
+@using URC.Models
+@using Microsoft.EntityFrameworkCore
+
+@{
+    string name = "";
+    IdentityUser user = null;
+    bool student, professor, admin;
+    student = professor = admin = false;
+    bool SignedIn = SignInManager.IsSignedIn(User);
+    name = SignedIn ? UserManager.GetUserName(User) : "";
+    ResearchOpportunity ProfOpp = null;
+    StudentApplication StudentApp = null;
+    if (SignedIn)
+    {
+        name = UserManager.GetUserName(User);
+        user = UserManager.FindByNameAsync(name).Result;
+        student = UserManager.IsInRoleAsync(user, "Student").Result;
+        professor = UserManager.IsInRoleAsync(user, "Professor").Result;
+        admin = UserManager.IsInRoleAsync(user, "Administrator").Result;
+
+        if (professor)
+            ProfOpp = await oppDB.ResearchOpportunities.FirstOrDefaultAsync(m => m.ProfEmail == user.Email);
+        if (student)
+            StudentApp = await oppDB.StudentApplications.FirstOrDefaultAsync(m => m.Email == user.Email);
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- meta tags and title info -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta author="Dan Ruley" />
+    <meta name="keywords" content="Research, Machine Learning, Computer Science, University of Utah, U of U, UofU, CS, Programming, Coding, Undergraduate, Utah, Salt Lake City, SLC" />
+    <meta name="description" content="This website is intended to connect undergraduate students with researchers in the Computer Science department who are seeking help for their research projects." />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <title>@ViewData["Title"] URC</title>
+    <link rel="stylesheet" href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light" style="background-color:#e3e3e1; padding: 10px; margin-bottom: 10px; border:solid; border-color:dimgray; border-top: none; border-left: none; border-right: none;">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+
+                <!-- Consolidate Admin Links Into Dropdown Menu to clean up navbar -->
+                @if (admin)
+                {
+                    <div class="btn-group dropdown" style="margin-left: 20px;">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 10px; border-radius: unset; box-shadow: 2px 3px black;">
+                            Admin Menu
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="/ResearchOpportunities/List">Manage Research Opportunities</a>
+                            <a class="dropdown-item" href="/Home/RolesTable">Manage Users and Roles</a>
+                            <a class="dropdown-item" href="/StudentApplications/">View Student Applications</a>
+                        </div>
+                    </div>
+                }
+
+                <!-- Dropdown Menu code -->
+                <div class="btn-group dropdown" style="margin-left: 20px;">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right:10px; border-radius: unset; box-shadow: 2px 3px black;">
+                        Site Menu
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/ResearchOpportunities/Index">Opportunities</a>
+                        <!--Only show some menu items to certain users.-->
+                        @if (SignedIn)
+                        {
+                            if (student)
+                            {
+                                if (StudentApp == null)
+                                {
+                                    <a class="dropdown-item" href="/StudentApplications/Create">Create Application</a>
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item" href="/StudentApplications/Details\@StudentApp.ID">View Application</a>
+                                    <a class="dropdown-item" href="/StudentApplications/Edit\@StudentApp.ID">Update Application</a>
+                                    <a class="dropdown-item" href="/StudentApplications/ApplicationStatus\@StudentApp.ID">Application Statuses</a>
+                                }
+
+                            }
+
+                            if (professor)
+                            {
+                                if (ProfOpp != null)
+                                {
+                                    <a class="dropdown-item" href="/ResearchOpportunities/Edit\@ProfOpp.ID">Edit Your Opportunity</a>
+                                }
+                                <a class="dropdown-item" href="/StudentApplications/StudentSearch">Student Search</a>
+                                <a class="dropdown-item" href="/StudentApplications/Index">View Student Applications</a>
+                            }
+                        }
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/Home/">Home Page</a>
+                        <a class="dropdown-item" href="/Home/Privacy">Privacy</a>
+                    </div>
+                </div>
+
+                <!--Right side of navbar-->
+                <ul class="navbar-nav mr-auto" style="padding:10px; padding-top: 10px">
+
+
+                    <li class="nav-item">
+                        <h4>
+                            <a class="nav-link" style="margin-left: 10px;" href="/Home/Index">Home</a>
+                        </h4>
+                    </li>
+
+                    <li class="nav-item">
+                        <h4>
+                            <a class="nav-link" style="margin-left: 10px;" href="/ResearchOpportunities/Index">Opportunities</a>
+                        </h4>
+                    </li>
+
+                    <!--Only show student app if a student is logged in.-->
+                    @if (SignedIn)
+                    {
+
+                        if (student)
+                        {
+                            if (StudentApp == null)
+                            {
+
+                                <li class="nav-item">
+                                    <h4>
+                                        <a class="nav-link" style="margin-left: 10px;" href="/StudentApplications/Create">Apply</a>
+                                    </h4>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <h4>
+                                        <a class="nav-link" style="margin-left: 10px;" href="/StudentApplications/Details\@StudentApp.ID">View Application</a>
+                                    </h4>
+                                </li>
+                                <li class="nav-item">
+                                    <h4>
+                                        <a class="nav-link" style="margin-left: 10px;" href="/StudentApplications/Edit\@StudentApp.ID">Update Application</a>
+                                    </h4>
+                                </li>
+                                <li class="nav-item">
+                                    <h4>
+                                        <a class="nav-link" href="/StudentApplications/ApplicationStatus\@StudentApp.ID">Application Statuses</a>
+                                    </h4>
+                                </li>
+                            }
+                        }
+
+                        <!--Only show roles admin table if an admin is logged in.-->
+                        if (professor && ProfOpp != null)
+                        {
+                            if (ProfOpp != null)
+                            {
+                                <li class="nav-item">
+                                    <h4>
+                                        <a class="nav-link" style="margin-left: 10px;" href="/ResearchOpportunities/Edit\@ProfOpp.ID">Edit Opportunity</a>
+                                    </h4>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <h4>
+                                    <a class="nav-link" style="margin-left: 10px;" href="/StudentApplications/StudentSearch">Student Search</a>
+                                </h4>
+                            </li>
+                            <li class="nav-item">
+                                <h4>
+                                    <a class="nav-link" style="margin-left: 10px;" href="/ResearchOpportunities/OpportunityApplicationList">Opportunity Application List</a>
+                                </h4>
+                            </li>
+                        }
+
+                    }
+                </ul>
+                <partial name="_NotificationPartial" />
+                <partial name="_LoginPartial" />
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            <a asp-area="" asp-controller="Home" asp-action="Index">Home</a> |
+            <a asp-area="" asp-controller="ResearchOpportunities" asp-action="Index">Opportunities</a> |
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - Dan Ruley
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
+@RenderSection("Scripts", required: false)
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

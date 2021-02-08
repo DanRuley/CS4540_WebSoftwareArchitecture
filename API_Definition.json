@@ -1,0 +1,204 @@
+//Set application status
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0",
+    "title": "Set Application Status",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://localhost:44303"
+    }
+  ],
+  "paths": {
+    "/StudentApplications/ToggleApplicationStatus": {
+      "post": {
+        "summary": "Sets the application status of the student user.",
+        "operationId": "appStatus",
+        "tags": [
+          "application_status"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID of the user",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "format": "int32"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Action to take for the application: 'active' or 'inactive'",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "active"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Message": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "description",
+          "message"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+
+//Student Summary
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0",
+    "title": "Get Student Summary",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://localhost:44303"
+    }
+  ],
+  "paths": {
+    "/StudentApplications/GetStudentSummary": {
+      "post": {
+        "summary": "Get summaries of students who match certain search keys",
+        "operationId": "StudentSummary",
+        "tags": [
+          "application_status"
+        ],
+        "parameters": [
+          {
+            "name": "SearchString",
+            "in": "query",
+            "description": "Search keywords",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "Java"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Summary"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error1"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Summary": {
+        "type": "object",
+        "required": [
+          "name","id","gpa","statment_Summary"
+        ],
+        "properties": {
+              "name": {
+                  "type": "string"
+              },
+              "id": {
+                  "type": "integer",
+                  "format": "int32"
+              },
+            "gpa": {
+                "type" :"string"
+            },
+            "statment_Summary": {
+                "type": "string"
+            }
+        }
+      },
+      "Error1": {
+        "type": "object",
+        "required": [
+          "description",
+          "message"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

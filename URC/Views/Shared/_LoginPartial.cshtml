@@ -1,0 +1,44 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  Extension for navbar register/login items.
+ -->
+
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<div class="nav-item" style="margin-right:20px;">
+    <h3>URC</h3>
+</div>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="nav-item">
+        <a id="manage" class="nav-divnk text-dark" style="margin-right:20px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello, @UserManager.GetUserName(User)</a>
+    </div>
+    <div class="nav-item">
+        <form id="logoutForm" class="form-indivne" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button id="logout" type="submit" class="btn btn-primary" style=" margin-right: 10px; border-radius: unset; box-shadow: 2px 3px black;">Logout</button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="nav-item">
+        <a class="nav-divnk text-dark" id="register" style="margin-right:20px;" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </div>
+    <div class="nav-item">
+        <a class="nav-divnk text-dark" id="login" style="margin-right:1px;" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </div>
+}
+

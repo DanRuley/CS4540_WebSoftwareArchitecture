@@ -1,0 +1,454 @@
+﻿/*
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  Contains CSS code for various HTML classes and attributes.  
+  I added significantly to this in order to style the tables and images I used.
+  The Visual Studio generated CSS is separated by comments at the bottom of this file.
+*/
+.table_header {
+    padding: 5px;
+    font: 25px bold Candara, serif;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#roleChk {
+    margin: 10px;
+    margin-left: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+roleT {
+    margin-left: 20px;
+    padding: 25px;
+}
+
+main_nav {
+    margin-left: 10px;
+}
+
+/*
+    Note: I modified code found from https://www.w3docs.com/snippets/html/how-to-create-an-html-button-that-acts-like-a-link.html to style the button links.
+*/
+.button {
+    text-align: center;
+    background-color: #7E98B6;
+    padding: 25px 35px;
+    display: inline-flex;
+    font-size: 20px;
+    border: 1px thin;
+    margin: 40px 40px;
+    cursor: pointer;
+    color: white;
+    border-radius: 4px;
+    position: relative;
+    left: 180px;
+}
+
+.header img {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    margin: 10px;
+    margin-right: 25px;
+    margin-left: 25px;
+    border: solid 1px;
+}
+
+.nicep #SearchString{
+    margin-top: 15px;
+    border-radius: 1px;
+}
+.nicep {
+    padding: 5px;
+    font-family: Candara;
+    font-weight: 800;
+    text-shadow: 1px 1px #D3D3D3;
+}
+
+.header td {
+    padding: 12px;
+    font-size: 50px;
+    font-family: Candara;
+    font-weight: 800;
+    text-shadow: 1px 1px #D3D3D3;
+    border: 4px solid #000;
+    border-radius: 4px;
+}
+
+.pagination p{
+    padding: 8px 16px;
+}
+
+.ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin-left: 100px;
+}
+
+ul.pagination li span {
+    border: 2px solid black;
+    margin: 1px;
+    box-shadow: 1px 2px #888888;
+    background-color: #E4EEEE;
+    padding: 8px 16px;
+    color: slategray;
+    float: left;
+}
+
+ul.pagination li a {
+    border: 2px solid black;
+    margin: 1px;
+    box-shadow: 1px 2px #888888;
+    background-color: #F4FFFF;
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+}
+
+    ul.pagination li a.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    ul.pagination li a:hover:not(.active) {
+        background-color: #ddd;
+    }
+
+.header {
+    /*border-radius: 8px;*/
+    margin-top: 40px;
+    margin-bottom: 25px;
+}
+
+.badaccess {
+    background-image: url("/images/badaccess.jpg");
+}
+
+.page {
+    background-image: url("/images/bg.jpg");
+}
+
+.opp_page {
+    background-color: lightcyan;
+    background-repeat: no-repeat;
+    background-image: linear-gradient( to bottom, transparent, #F4F3F3 ), url("/images/bg.jpg")
+}
+
+.opportunity img {
+    width: 150px;
+    height: 150px;
+    position: center;
+    border-radius: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.crudform {
+    padding: 10px;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 20px;
+}
+
+.opportunity {
+    width: 1000px;
+    border: 2px solid black;
+    box-shadow: 5px 8px #888888;
+    padding: 10px;
+    margin: 20px;
+    background-color: #F4FFFF;
+}
+
+.opp_table {
+    border: 2px solid #ddd;
+    text-align: left;
+}
+
+.opp_details_table {
+    width: 100%;
+    border: 2px solid #ddd;
+    text-align: left;
+}
+
+.detail_table {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    margin: 40px;
+    border: 2px solid #000;
+    box-shadow: 5px 8px #888888;
+    text-align: left;
+    width: 70%;
+    background-color: #F4FFFF;
+}
+
+.details img {
+    margin: auto;
+    margin: 40px;
+    margin-left: 170px;
+    margin-right: auto;
+    width: 70%;
+    border-radius: 8px;
+    border: 2px solid #482020;
+}
+
+.detail_table, .detail_table.th td tr {
+    margin: auto;
+}
+
+    .detail_table th {
+        width: 40%;
+    }
+
+.admin_table {
+    width: 750px;
+    margin-right: auto;
+    border: 2px solid #000;
+    box-shadow: 3px 4px #888888;
+    background-color: #F4FFFF;
+}
+
+    .admin_table th {
+        width: 30%;
+    }
+
+
+
+
+/*################   VS Generated #################*/
+
+
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+    .btn-primary:hover {
+        background-color: steelblue;
+    }
+
+.btn {
+    background-color: #7E98B6;
+    border: 1px solid black;
+}
+
+.btn-secondary {
+    background-color: #888888;
+}
+
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+p {
+    font-size: 25px;
+    font: arial;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+/*################ End VS Generated #################*/
+
+
+/* Notification Symbol on Navbar
+------------------------------------------------ */
+
+.notification-number {
+    font-size: 12px;
+    background-color: #ff1a1a;
+    border-radius: 50%;
+    padding: 1px 5px;
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    color: white;
+}
+
+.icon-lg {
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.dropdown-icon {
+    width: 50px;
+    margin-left: 30px;
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-items {
+    background-color: white;
+    display: none;
+    position: absolute;
+    left: -180px;
+    top: 30px;
+    width: 440px;
+    z-index: 1;
+}
+
+.show-notification-list {
+    display: block;
+}
+
+.notification-img {
+    width: 50px;
+    height: 50px;
+}
+
+.notification-item {
+    margin: 10px 20px;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    column-gap: 10px;
+}
+
+.notification {
+    margin: 20px 0px;
+}
+
+hr {
+    color: #e8e8e8;
+    width: 94%;
+}
+
+.notification-title {
+    text-align: center;
+    margin-left: 20px;
+    font-weight: 500;
+    font-size: 20px;
+    color: #b8b8b8;
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item-title {
+    display: block;
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.notification-description {
+    text-decoration: none;
+}
+
+.text-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.notification-close-icon {
+    cursor: pointer;
+    position: relative;
+    top: 13px;
+    left: 25px;
+    color: #e8e8e8;
+}
+
+.notification-close-icon {
+    color: #a8a8a8;
+}
+
+.notification-footer {
+    text-align: center;
+    margin-left: 20px;
+    font-weight: 500;
+    font-size: 20px;
+    cursor: pointer;
+    color: #b8b8b8;
+}
+
+.filled-text {
+    color: steelblue;
+}
+
+.application-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.application-action-button {
+    margin-right: 10px;
+}
+
+.status-text {
+    color: #03579c;
+    min-width: 100px;
+}

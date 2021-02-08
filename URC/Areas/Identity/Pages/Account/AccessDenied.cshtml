@@ -1,0 +1,52 @@
+﻿@page
+@model AccessDeniedModel
+
+@{
+    ViewData["Title"] = "Access denied";
+}
+
+<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      October, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+    This is the view for the scaffolded AcessDenied page.  I added a bit more flavor to it.
+ -->
+
+
+<body class="badaccess">
+    <div class="row">
+        <div class="col col-md-7" style="padding:50px;">
+            <section>
+                <div class="jumbotron" id="home_jumbo" style="height: 25%; background-color: #000000; box-shadow: 5px 8px #1e0606; border: 3px solid #1e0606;">
+
+                    <header>
+                        <h1 class="text-danger" style="text-shadow: 2px 2px #1f0462">@ViewData["Title"]</h1>
+                        <p class="text-danger" style="text-shadow: 2px 2px #1f0462">You do not have access to this resource.</p>
+                    </header>
+                </div>
+                <div class="jumbotron" id="home_jumbo" style="height: 25%; background-color: #000000; box-shadow: 5px 8px #1e0606; border: 3px solid #1e0606;">
+
+                    <header>
+                        <h1 class="text-danger" style="text-shadow: 2px 2px #1f0462"><a href="/Home/Index/">Return Home</a></h1>
+                    </header>
+                </div>
+            </section>
+        </div>
+
+
+        <div class="col-md-4 col-md-offset-2" style="margin-left: 50px; padding: 50px;">
+            <section>
+                <img src="~/images/nopass.jpeg" />
+            </section>
+        </div>
+    </div>
+
+</body>

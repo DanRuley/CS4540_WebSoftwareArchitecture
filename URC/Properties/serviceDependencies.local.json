@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql.local",
+      "connectionId": "ResearchOpportunityContext"
+    },
+    "mssql2": {
+      "type": "mssql.local",
+      "connectionId": "UserRolesDBConnection"
+    },
+    "mssql3": {
+      "type": "mssql.local",
+      "connectionId": "ApplicationContext"
+    }
+  }
+}

@@ -1,0 +1,127 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  View for the Student Application List page.
+ -->
+@model X.PagedList.IPagedList<URC.Models.StudentApplication>
+@using X.PagedList.Mvc.Core
+
+@{
+    ViewData["Title"] = "Index";
+}
+<body class="opp_page">
+
+    <!-- Title with U of U Logo-->
+    <table class="header" id="priv_h">
+        <tbody>
+            <tr>
+                <td width="85%">
+                    Student Applications
+                </td>
+                <td>
+                    <img src="/images/uofu.jpg" alt="Pict" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row opportunity text-center">
+        <div class="col-lg-6">
+            <p class="nicep" style="padding:10px; margin-top: 15px;">
+                Search Applications by name or uID
+            </p>
+            <p>
+                @using (Html.BeginForm("Index", "StudentApplications", FormMethod.Get))
+                {
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                    <input style="margin-bottom:0px; border-radius: 0px 0px; box-shadow: 2px 2px #888888; margin-left: 10px;" class="btn btn-primary" type="submit" value="Search" />
+                }
+            </p>
+        </div>
+
+        <div class="nicep col-lg-6 text-center">
+            <p style="padding: 15px;">
+                @Html.ActionLink("Sort Applications by name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </p>
+            <p style="padding: 15px;">
+                @Html.ActionLink("Sort Applications by uID", "Index", new { sortOrder = ViewBag.UIDSortParm, currentFilter = ViewBag.CurrentFilter })
+            </p>
+        </div>
+    </div>
+
+    <table class="opp_details_table opportunity text-center" style="padding: 20px; margin-left: 0px; border: 2px solid black; ">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Active
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    uID
+                </th>
+                <th>
+                    GPA
+                </th>
+                <th>
+                    Application Date
+                </th>
+                <th>
+                    Details
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="align-middle text-center">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @{
+                            var s = item.Active ? "Yes" : "No";
+                        }
+                        @Html.Raw(s)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UID)
+                    </td>
+                    <td>
+                        @Html.Raw(String.Format("{0:0.00}", item.GPA))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AppDate)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="pagination" style="padding: 25px;">
+        <p>
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </p>
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+</body>

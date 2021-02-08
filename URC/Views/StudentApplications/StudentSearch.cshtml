@@ -1,0 +1,45 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+  View for the Student Application Student Search page.
+ -->
+
+@{
+    ViewData["Title"] = "StudentSearch";
+}
+
+<body class="page">
+
+    <div class="container" style="width: 60%; margin-left: 0px;">
+        <h1 style="padding: 10px">
+            Student Search Page
+        </h1>
+        <h5 style="padding: 10px">
+            Search for a student in the database.
+            You can search for student skills e.g. "Java", "C++", as well as student interests such as "Hiking" or "Music".
+            Search queries are not case-sensitive.
+        </h5>
+        <hr />
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="StudSearch">Enter search queries separated by commas.</label>
+                <input type="Search" class="form-control" id="StudSearch" />
+            </div>
+
+            <input class="btn btn-primary" onclick="FindStudents()" style="margin-top: 35px; width: 100px; height: 60px; cursor: pointer; padding: 10px; margin-left: 10px;" value="Search" />
+        </div>
+        <h5 id="SearchResult" style="margin-left: 0px; padding: 10px;"></h5>
+        <table class="opportunity opp_details_table" id="ResultTable" style="margin-left: 0px">
+        </table>
+    </div>
+
+</body>

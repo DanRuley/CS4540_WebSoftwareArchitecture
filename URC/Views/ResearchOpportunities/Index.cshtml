@@ -1,0 +1,312 @@
+﻿<!--
+  Author:    Dan Ruley
+  Partner:   None
+  Date:      September, 2020
+  Course:    CS 4540, University of Utah, School of Computing
+  Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+  I, Dan Ruley, certify that I wrote this code from scratch and did
+  not copy it in part or whole from another source.  Any references used
+  in the completion of the assignment are cited in my README file and in
+  the appropriate method header.
+
+    Main Research Opp. View
+    Reference for table pagination view code: https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/getting-started-with-ef-using-mvc/sorting-filtering-and-paging-with-the-entity-framework-in-an-asp-net-mvc-application
+ -->
+@using Microsoft.AspNetCore.Identity;
+
+
+@inject UserManager<IdentityUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@inject SignInManager<IdentityUser> SignInManager
+@model X.PagedList.IPagedList<URC.Models.ResearchOpportunity>
+@inject URC.Data.ResearchOpportunityContext oppDB
+
+@using X.PagedList.Mvc.Core
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewData["Title"] = "Opportunities";
+    ViewData["M"] = @ViewBag.Message;
+    ViewBag.Title = "Opportunities";
+
+    var name = UserManager.GetUserName(User);
+    bool is_student = false;
+    StudentApplication studentApplication = null;
+    if (name != null)
+    {
+        var user = await UserManager.FindByNameAsync(name);
+        studentApplication = oppDB.StudentApplications.Where(s => s.Email == user.Email).FirstOrDefault();
+
+        is_student = await UserManager.IsInRoleAsync(user, "Student");
+    }
+}
+<style>
+    input[type=text] {
+        width: 50%;
+        padding: 12px 5px;
+        margin: 8px 0;
+        box-sizing: border-box;
+    }
+
+    input[type=submit] {
+        margin-left: 10px;
+    }
+</style>
+
+<body class="opp_page" id="opp_pg">
+
+    <!-- Title with U of U Logo-->
+    <table class="header" id="opp_h">
+        <tbody>
+            <tr>
+                <td width="85%">
+                    Current Undergraduate Research Opportunities
+                </td>
+                <td>
+                    <img src="/images/uofu.jpg" alt="UofU Logo" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row opportunity text-center">
+        <div class="col-lg-6">
+            <p class="nicep" style="padding:15px;">
+                Search Opportunities by Professor name, required skills, tags, or project description:
+            </p>
+            <p>
+                @using (Html.BeginForm("Index", "ResearchOpportunities", FormMethod.Get))
+                {
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                    <input style="margin-bottom:0px; border-radius: 0px 0px; box-shadow: 2px 2px #888888; margin-left: 10px;" class="btn btn-primary" type="submit" value="Search" />
+                }
+            </p>
+        </div>
+
+        <div class="nicep col-lg-6 text-center">
+            <p style="padding: 15px; margin-top: 45px;">
+                @Html.ActionLink("Sort Opportunities by name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </p>
+            <p style="padding: 15px;">
+                @Html.ActionLink("Sort Opportunities by start date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </p>
+        </div>
+    </div>
+
+
+
+    <div class="main_opp_container">
+
+
+        @foreach (var item in Model)
+        {
+
+            <!--Research Opportunity Element-->
+            <div class="opportunity" id="opp_1" style="margin-top: 0px">
+
+                <table class="opp_table" id="ot_1">
+                    <tbody>
+
+                        <tr>
+                            <td class="table_header">@Html.DisplayFor(itemModel => item.ProfName)</td>
+
+                                <td class="table_header d-flex">
+                                    @Html.DisplayFor(itemModel => item.ProjectName)
+
+                                    @if (item.Filled)
+                                    {
+                                        <div class="ml-auto filled-text">
+                                            Filled
+                                        </div>
+                                    }
+                                    @if (!item.Filled)
+                                    {
+                                        @if (is_student)
+                                        {
+                                            var studentOpportunityApplied = studentApplication == null ? null : oppDB.StudentOpportunityApplied.Where(s => s.StudentApplicationID == studentApplication.ID && s.ResearchOpportunityID == item.ID).FirstOrDefault();
+                                            @if (studentOpportunityApplied != null)
+                                            {
+                                                <div class="ml-auto">
+                                                    <button class="btn-success" disabled>
+                                                        Applied
+                                                    </button>
+                                                </div>
+                                             }
+                                             else
+                                             {
+                                                <div class="ml-auto">
+                                                    <button class="btn-success" onclick="ApplyToOpportunity(this, '@item.ID', '@(studentApplication != null ? studentApplication.ID : 0)')">
+                                                        Apply
+                                                    </button>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </td>
+
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-center">
+                                <img src="@Html.DisplayFor(itemModel => item.ProfessorImage)" style="border: solid 4px; box-shadow: 3px 3px #888888;" alt="Pict" />
+                            </td>
+
+                            <td width="75%">
+
+                                <table class="opp_nested_table" width="50%" id="ont_1">
+                                    <tbody>
+                                        <tr>
+                                            <th width="25%">
+                                                Project Description:
+                                            </th>
+                                            <td>
+                                                @Html.DisplayFor(itemModel => item.Description)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Required Skills:
+                                            </th>
+                                            <td>
+                                                @Html.DisplayFor(itemModel => item.Skills)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Position Available:
+                                            </th>
+                                            <td>
+
+                                                @(item.Filled ? "No" : "Yes")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Start Date:
+                                            </th>
+                                            <td>
+                                                @item.Start.Month/@item.Start.Day/@item.Start.Year
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Details
+                                            </th>
+                                            <td>
+                                                <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                                            </td>
+                                        </tr>
+                                        @if (UserManager.GetUserName(User) == item.ProfEmail)
+                                        {
+                                            <tr>
+                                                <th>
+                                                    Hello, @item.ProfName
+                                                </th>
+                                                <td>
+                                                    <a asp-action="Edit" asp-route-id="@item.ID">Edit your opportunity</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+        <br />
+        <div class="pagination" style="padding: 25px;">
+            <p>
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            </p>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+        <a href="/StudentApplications/Create" class="btn btn-primary" style="box-shadow: #3f3f3f 2px 4px; width: 250px; height: 75px;margin-left: 375px; margin-right: 375px; padding: 25px">Submit an application!</a>
+        <br /><br /><br />
+    </div>
+
+    @section Scripts {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+                if ('@ViewBag.Message' != '') {
+                    toastr["success"]('@ViewBag.Message');
+                }
+            });
+        </script>
+
+        <script type="text/javascript">
+            async function ApplyToOpportunity(refElement, opportunityID, applicationID) {
+                if (applicationID === '0') {
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr["error"]('You need to create an application first');
+                    return;
+                }
+                try {
+                    $.ajax({
+                        url: '/ResearchOpportunities/Apply',
+                        data: {
+                            OpportunityId: opportunityID,
+                            ApplicationId: applicationID
+                        },
+                        method: 'POST',
+                        success: function () {
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "positionClass": "toast-top-right",
+                                "preventDuplicates": false,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            };
+                            toastr["success"]('You successfully have applied to the Opportunity');
+                            refElement.innerText = "Applied";
+                            refElement.disabled = true;
+                        }
+                    });
+                }
+                finally {
+                }
+            }
+        </script>
+    }
+</body>

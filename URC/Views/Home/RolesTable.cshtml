@@ -1,0 +1,136 @@
+﻿<!--
+ Author:    Dan Ruley
+ Partner:   None
+ Date:      September, 2020
+ Course:    CS 4540, University of Utah, School of Computing
+ Copyright: CS 4540 and Dan Ruley - This work may not be copied for use in Academic Coursework.
+
+ I, Dan Ruley, certify that I wrote this code from scratch and did
+ not copy it in part or whole from another source.  Any references used
+ in the completion of the assignment are cited in my README file and in
+ the appropriate method header.
+
+ This is the HTML for the Roles table view.  It injects the appropriate data to access the roles DB and makes calls to the UpdateDBRequest javascript function (in site.js file)
+-->
+@using Microsoft.AspNetCore.Identity
+
+
+@inject UserManager<IdentityUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
+@model X.PagedList.IPagedList<IdentityUser>
+@using X.PagedList.Mvc.Core
+
+@{
+    ViewBag.Title = "RolesTable";
+}
+
+@{var allRoles = new string[] { "Administrator", "Professor", "Student" };}
+
+@section Scripts
+
+
+{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.3.5/dist/sweetalert2.all.min.js"></script>
+}
+
+<body class="opp_page" id="priv_pg">
+
+    <!-- Title with U of U Logo-->
+    <table class="header" id="priv_h">
+        <tbody>
+            <tr>
+                <td width="85%">
+                    User Roles Administrator Page
+                </td>
+                <td>
+                    <img src="/images/uofu.jpg" alt="Pict" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <div class="row opportunity text-center">
+        <div class="col-lg-6">
+            <p class="nicep" style="padding:15px;">
+                Search Users by email or role
+            </p>
+            <p>
+                @using (Html.BeginForm("RolesTable", "Home", FormMethod.Get))
+                {
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                    <input style="margin-bottom:0px; border-radius: 0px 0px; box-shadow: 2px 2px #888888; margin-left: 10px;" class="btn btn-primary" type="submit" value="Search" />
+                }
+            </p>
+        </div>
+
+        <div class="nicep col-lg-6 text-center">
+            <p style="padding: 15px; margin-top: 30px">
+                @Html.ActionLink("Sort users by email", "RolesTable", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </p>
+        </div>
+    </div>
+
+    <div class="opportunity" style="margin-bottom:0px;">
+
+
+
+        <table class="opp_details_table text-center align-middle">
+            <thead class="thead-light">
+
+                <tr>
+
+                    <th scope="col" class="roleT" style="padding:25px; font-size: 25px">User Name</th>
+                    <th scope="col" class="roleT" style="padding:25px" width="15%">@Html.Raw(allRoles[0])</th>
+                    <th scope="col" class="roleT" style="padding:25px; margin-left: 35px;" width="15%">@Html.Raw(allRoles[1])</th>
+                    <th scope="col" class="roleT" style="padding:25px; margin-left: 35px;" width="15%">@Html.Raw(allRoles[2])</th>
+                    <th scope="col" class="roleT" style="padding:25px; margin-left: 35px;" width="15%">Delete User</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td scope="row" style="padding:25px">@user.UserName</td>
+
+                        @foreach (var role in allRoles)
+                        {
+                            bool hasrole = await UserManager.IsInRoleAsync(user, role);
+
+                            if (hasrole)
+                            {
+                                <td>
+                                    <div class="custom-control custom-switch" id="@role">
+                                        <input data="@user.Id" style="cursor: pointer; margin-right: 35px;" onclick="updateDBRequest('@user.UserName', '@role')" checked="checked" class="role_ADD" type="checkbox">
+                                    </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <div class="custom-control custom-switch" id="@role">
+                                        <input data="@user.Id" style="cursor: pointer; margin-right: 35px;" onclick="updateDBRequest('@user.UserName', '@role')" class="role_ADD" type="checkbox">
+                                    </div>
+                                </td>
+                            }
+
+                        }
+                        <td>
+                            <div class="custom-control custom-switch" id="@user.Id">
+                                <input data="@user.Id" class="btn btn-primary role_DEL" style="border-radius: 0px 0px; box-shadow: 2px 2px #888888; cursor: pointer; margin-right: 30px;" value="Delete" onclick="deleteUsr('@user.UserName', 'delete')" type="button">
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination" style="padding: 25px;">
+        <p>
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </p>
+        @Html.PagedListPager(Model, page => Url.Action("RolesTable", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+</body>

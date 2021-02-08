@@ -1,0 +1,69 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject URC.Data.ResearchOpportunityContext oppDB
+
+@{
+    List<Notification> notifications = new List<Notification>();
+    bool isStudent = false;
+    IdentityUser user = null;
+    if (SignInManager.IsSignedIn(User))
+    {
+        user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+        isStudent = UserManager.IsInRoleAsync(user, "Student").Result;
+        notifications = oppDB.Notifications.Where(n => n.Read == false && n.UserID.Equals(user.Id)).ToList();
+    }
+    var n = oppDB.Notifications.ToList();
+}
+
+@if (SignInManager.IsSignedIn(User) && isStudent)
+{
+    <div class="nav-item" style="margin-right:20px;">
+        <div id="notification-icon" class="dropdown-icon">
+            <i class="fa fa-bell icon-lg" onclick="ShowNotificationList()"></i>
+            @if (notifications.Count() != 0)
+            {
+                <span id="notification-number" class="notification-number">
+                    @notifications.Count()
+                </span>
+            }
+            <div id="notification" class="dropdown-items" aria-labelledby="dropdownMenuButton">
+                <div class="notification">
+                    <div class="notification-title">
+                        Recent Opportunities
+                    </div>
+                    <hr />
+                    <div id="notification-list" class="notification-list">
+                        @foreach (var notification in notifications)
+                        {
+                        <div id="notification-@notification.ID">
+                            <div class="notification-item">
+                                <div>
+                                    <img class="notification-img" src="@Html.DisplayFor(itemModel => oppDB.ResearchOpportunities.Find(notification.OpportunityID).ProfessorImage)" />
+                                </div>
+                                <div class="text-ellipsis">
+                                    <a class="notification-item-title text-ellipsis" asp-controller="ResearchOpportunities" asp-action="Details" asp-route-id="@notification.OpportunityID">
+                                        @oppDB.ResearchOpportunities.Find(notification.OpportunityID).ProjectName
+                                    </a>
+                                    <a class="notification-description text-ellipsis">@oppDB.ResearchOpportunities.Find(notification.OpportunityID).Skills</a>
+                                </div>
+                                <div>
+                                    <i class="fa fa-times notification-close-icon" onclick="ClearNotification('@notification.ID')"></i>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                        }
+                    </div>
+                    <div class="notification-footer" onclick="ClearAllNotification('@user.Id')">
+                        Mark all as Read
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

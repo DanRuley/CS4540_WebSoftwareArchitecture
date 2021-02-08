@@ -1,0 +1,159 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@inject SignInManager<IdentityUser> SignInManager
+@model List<URC.Models.OpportunityApplication>
+@inject URC.Data.ResearchOpportunityContext oppDB
+
+@{
+}
+
+<body class="opp_page" id="opp_pg">
+
+    @foreach (var item in Model)
+    {
+        <div class="opportunity">
+
+            @foreach (var application in item.StudentApplication)
+            {
+                <table class="opp_table mb-lg-5" id="ot_1">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex">
+                                    <span>Application for </span> @item.OpportunityName
+                                <div class="ml-auto status-text" id="status-@oppDB.StudentOpportunityApplied.Where(s => s.ResearchOpportunityID == item.OppotunityID && s.StudentApplicationID == application.ID).FirstOrDefault().ID">
+                                    @oppDB.StudentOpportunityApplied.Where(s => s.ResearchOpportunityID == item.OppotunityID && s.StudentApplicationID == application.ID).FirstOrDefault().Status
+                                </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="application-actions">
+                                    <button class="btn-danger application-action-button" onclick="ChangeStatus('@oppDB.StudentOpportunityApplied.Where(s => s.ResearchOpportunityID == item.OppotunityID && s.StudentApplicationID == application.ID).FirstOrDefault().ID', 'rejected')"> Reject </button>
+                                    <button class="btn btn-primary application-action-button" onclick="ChangeStatus('@oppDB.StudentOpportunityApplied.Where(s => s.ResearchOpportunityID == item.OppotunityID && s.StudentApplicationID == application.ID).FirstOrDefault().ID', 'under review')"> Review</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="75%">
+                                <table class="opp_nested_table" width="50%" id="ont_1">
+                                    <tbody>
+                                        <tr>
+                                            <th width="25%">
+                                                Name:
+                                            </th>
+                                            <td>
+                                                @application.Name
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Degree
+                                            </th>
+                                            <td>
+                                                @application.Degree
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                GPA:
+                                            </th>
+                                            <td>
+                                                @application.GPA
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Email:
+                                            </th>
+                                            <td>
+                                                @application.Email
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Completed Courses:
+                                            </th>
+                                            <td>
+                                                @application.CompletedCourses
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Skills
+                                            </th>
+                                            <td>
+                                                @application.Skills
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Interests
+                                            </th>
+                                            <td>
+                                                @application.Interests
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                                <div>
+                                    <div>
+                                        Personal Statement
+                                    </div>
+                                    <div>
+                                        @application.PersonalStatement
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+
+    @section Scripts {
+        <script type="text/javascript">
+            async function ChangeStatus(StudentOpportunityAppliedID, status) {
+                try {
+                    $.ajax({
+                        url: '/ResearchOpportunities/ChangeStatus',
+                        data: {
+                            StudentOpportunityAppliedId: StudentOpportunityAppliedID,
+                            Status: status
+                        },
+                        method: 'POST',
+                        success: function () {
+                            console.log(`#status-${StudentOpportunityAppliedID}`);
+                            document.getElementById(`status-${StudentOpportunityAppliedID}`).innerHTML = status;
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "positionClass": "toast-top-right",
+                                "preventDuplicates": false,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            };
+                            toastr["success"]('You successfully have marked application as reviewing');
+                        }
+                    });
+                }
+                finally {
+                }
+            }
+        </script>
+    }
+</body>
